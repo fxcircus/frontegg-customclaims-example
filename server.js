@@ -177,6 +177,33 @@ app.post("/saml", (req, res) => {
   });
 })
 
+// Social login
+app.post("/social", (req, res) => {
+  console.log("New request!", req.body.data.authData); // print full req for reference
+  const userName = req.body.data.authData.user.name
+  const userMetadata = req.body.data.authData.user.metadata
+  const userProfilePictureUrl = req.body.data.authData.user.profilePictureUrl
+  console.log(`userName = ${userName}\nuserMetadata = ${userMetadata}\n userProfilePictureUrl = ${userProfilePictureUrl}`)
+  return res.send({
+    continue: true,
+    response: {
+      user: {
+        name:userName,
+        metadata: JSON.stringify({
+          "socialClaimA": "valueX",
+          "socialClaimB": "valueY"
+        }),
+        profilePictureUrl: userProfilePictureUrl
+      },
+    },
+  });
+});
+
+const port = 5000
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`)
+});
+
 // ----
 // Run:
 // ----  
